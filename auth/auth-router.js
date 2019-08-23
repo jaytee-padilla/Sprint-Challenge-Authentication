@@ -32,7 +32,24 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
 	// implement login
-	
+	let { username, password } = req.body;
+
+	usersDb.findByUsername(username)
+		.then(user => {
+			if(user && bcrypt.compareSync(password, user.password)) {
+				// *********** TOKEN WILL GO HERE ************
+				
+				res.status(200).json({
+					message: `Welcome ${user.username}`
+				});
+			} else {
+				res.status(401).json({message: 'Invalid login credentials'});
+			}
+
+		})
+		.catch(error => {
+			res.status(500).json({message: 'Error communicating with database'})
+		});
 });
 
 module.exports = router;
