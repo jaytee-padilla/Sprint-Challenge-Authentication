@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const usersDb = require('../users/users-model');
 const secrets = require('../config/secrets');
+const authenticate = require('../auth/authenticate-middleware');
 
 // get users
-router.get('/users', (req, res) => {
+router.get('/users', authenticate, (req, res) => {
 	usersDb.find()
 		.then(users => {
 			res.status(200).json(users);
